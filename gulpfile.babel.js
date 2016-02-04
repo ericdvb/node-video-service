@@ -53,13 +53,7 @@ function bundle() {
 }
 
 function notifyLiveReload(event) {
-  var fileName = require('path').relative(__dirname, event.path);
-
-  tinylr.changed({
-    body: {
-      files: [fileName]
-    }
-  });
+  tinylr.changed(event.path);
 }
 
 gulp.task('watch', () => {
@@ -67,7 +61,7 @@ gulp.task('watch', () => {
   gulp.watch('*.html', notifyLiveReload);
   gulp.watch('css/*.css', notifyLiveReload);
   gulp.watch('scripts/*.js', bundle);
-  gulp.watch('dist/*.js', notifyLiveReload);
+  gulp.watch('dist/*.js').on('change', notifyLiveReload);
 });
 
 gulp.task('default', ['sass', 'express', 'livereload', 'watch'], () => {});
