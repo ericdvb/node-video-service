@@ -11,19 +11,20 @@ import buffer from 'vinyl-buffer';
 import assign from 'lodash.assign';
 import sourcemaps from 'gulp-sourcemaps';
 import gutil from 'gulp-util';
-
-const customOpts = {
-  entries: ['./scripts/main.js'],
-  debug: true
-};
-const opts = assign({}, watchify.args, customOpts);
+import nodemon from 'gulp-nodemon';
 
 gulp.task('express', () => {
-  var express = require('express');
-  var app = express();
-  app.use(require('connect-livereload')({port: 35729}));
-  app.use(express.static(__dirname));
-  app.listen(4000, '0.0.0.0');
+  //var express = require('express');
+  //var app = express();
+  //app.use(require('connect-livereload')({ port: 35729 }));
+  //app.use(express.static(__dirname));
+  //app.listen(4000, '0.0.0.0');
+
+  nodemon({
+    script: 'dist/server.js',
+    ext:    'js',
+    env:    {'NODE_ENV': 'development'}
+  });
 });
 
 gulp.task('sass', () => {
@@ -40,14 +41,30 @@ gulp.task('livereload', () => {
   tinylrInstance.listen(35729);
 });
 
-function bundle() {
+function bundle(event) {
+
+  var filename = event.path.slice( event.path.lastIndexOf( '/' ) + 1 );
+
+  const customOpts = {
+    entries: ['./scripts/' + filename],
+    debug: true
+  };
+  const opts = assign({}, watchify.args, customOpts);
+
+  console.log(filename);
+  //console.log(opts);
+
   return watchify(browserify(opts)
-      .transform('babelify', {presets: ['es2015']}))
+      .exclude('http')
+      .transform('babelify', {presets: ['es2015']})
+    )
     .bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-    .pipe(source('main.js'))
+    .pipe(
+      source( filename )
+    )
     .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps:true}))
+    .pipe(sourcemaps.init({loadmaps:true}))
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('dist'));
 }
@@ -60,7 +77,7 @@ gulp.task('watch', () => {
   gulp.watch('sass/*.scss', ['sass']);
   gulp.watch('*.html', notifyLiveReload);
   gulp.watch('css/*.css', notifyLiveReload);
-  gulp.watch('scripts/*.js', bundle);
+  gulp.watch('scripts/{main,server}.js', bundle);
   gulp.watch('dist/*.js').on('change', notifyLiveReload);
 });
 

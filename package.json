@@ -10,16 +10,20 @@
     "browserify": "^13.0.0",
     "connect-livereload": "^0.5.4",
     "express": "^4.13.4",
+    "glob": "^6.0.4",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.2",
     "gulp-minify-css": "^1.2.3",
+    "gulp-nodemon": "^2.0.6",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.1.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
     "lodash": "^4.2.0",
     "lodash.assign": "^4.0.1",
+    "nodemon": "^1.8.1",
     "tiny-lr": "^0.2.1",
+    "utils-merge": "^1.0.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
@@ -30,6 +34,7 @@
   "author": "Eric Willenson / ericdvb",
   "license": "ISC",
   "dependencies": {
+    "fluent-ffmpeg": "^2.0.1",
     "jquery": "^2.2.0",
     "tone": "^0.6.1"
   }
