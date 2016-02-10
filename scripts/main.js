@@ -55,5 +55,21 @@ Tone.Buffer.on('load', () => {
         player.start();
       });
     }
-  })
+  });
+
+  $('#record').on('click', (e) => {
+    recorder.exportWAV( (audioBlob) => {
+      var request = new XMLHttpRequest();
+      request.open('POST', '/combine');
+      request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      request.onload = function() {
+        console.log('request successful');
+      }
+
+      var fd = new FormData();
+      fd.append('fname', 'userSound.wav');
+      fd.append('data', audioBlob);
+
+    });
+  });
 });

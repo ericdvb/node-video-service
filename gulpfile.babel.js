@@ -13,17 +13,11 @@ import sourcemaps from 'gulp-sourcemaps';
 import gutil from 'gulp-util';
 import nodemon from 'gulp-nodemon';
 
-gulp.task('express', () => {
-  //var express = require('express');
-  //var app = express();
-  //app.use(require('connect-livereload')({ port: 35729 }));
-  //app.use(express.static(__dirname));
-  //app.listen(4000, '0.0.0.0');
-
+gulp.task('app', () => {
   nodemon({
     script: 'dist/server.js',
-    ext:    'js',
-    env:    {'NODE_ENV': 'development'}
+    ignore: ['./*.*', './dist/main.js'],
+    watch: ['dist/server.js']
   });
 });
 
@@ -51,11 +45,7 @@ function bundle(event) {
   };
   const opts = assign({}, watchify.args, customOpts);
 
-  console.log(filename);
-  //console.log(opts);
-
   return watchify(browserify(opts)
-      .exclude('http')
       .transform('babelify', {presets: ['es2015']})
     )
     .bundle()
@@ -69,6 +59,17 @@ function bundle(event) {
     .pipe(gulp.dest('dist'));
 }
 
+gulp.task('copyToDist', () => {
+  copyToDist({path: '/Users/ewillenson/work/soundboard/scripts/server.js'});
+});
+
+function copyToDist(event) {
+  console.log(event);
+  var filename = event.path.slice( event.path.lastIndexOf( '/' ) + 1 );
+  gulp.src('scripts/' + filename)
+  .pipe(gulp.dest('dist'));
+}
+
 function notifyLiveReload(event) {
   tinylr.changed(event.path);
 }
@@ -77,8 +78,9 @@ gulp.task('watch', () => {
   gulp.watch('sass/*.scss', ['sass']);
   gulp.watch('*.html', notifyLiveReload);
   gulp.watch('css/*.css', notifyLiveReload);
-  gulp.watch('scripts/{main,server}.js', bundle);
-  gulp.watch('dist/*.js').on('change', notifyLiveReload);
+  gulp.watch('scripts/main.js', bundle);
+  gulp.watch('scripts/server.js', copyToDist);
+  gulp.watch('dist/main.js').on('change', notifyLiveReload);
 });
 
-gulp.task('default', ['sass', 'express', 'livereload', 'watch'], () => {});
+gulp.task('default', ['sass', 'copyToDist', 'app', 'livereload', 'watch'], () => {});
