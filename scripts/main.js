@@ -54,22 +54,23 @@ Tone.Buffer.on('load', () => {
         player.buffer = playerBuffer;
         player.start();
       });
+
+      recorder.exportWAV( (audioBlob) => {
+        var request = new XMLHttpRequest();
+        request.open('POST', '/combine');
+        request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        request.onload = function() {
+          console.log('request successful');
+        }
+
+        //var formData = new FormData();
+        //formData.append('fname', 'userSound.wav');
+        //formData.append('data', audioBlob);
+
+        request.setRequestHeader('Content-Type', audioBlob.type);
+        request.send(audioBlob);
+        console.log('request sent');
+      });
     }
-  });
-
-  $('#record').on('click', (e) => {
-    recorder.exportWAV( (audioBlob) => {
-      var request = new XMLHttpRequest();
-      request.open('POST', '/combine');
-      request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      request.onload = function() {
-        console.log('request successful');
-      }
-
-      var fd = new FormData();
-      fd.append('fname', 'userSound.wav');
-      fd.append('data', audioBlob);
-
-    });
   });
 });

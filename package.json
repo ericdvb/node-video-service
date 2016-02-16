@@ -34,6 +34,7 @@
   "author": "Eric Willenson / ericdvb",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.14.2",
     "fluent-ffmpeg": "^2.0.1",
     "jquery": "^2.2.0",
     "tone": "^0.6.1"
