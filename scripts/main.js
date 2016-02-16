@@ -56,6 +56,7 @@ Tone.Buffer.on('load', () => {
       });
 
       recorder.exportWAV( (audioBlob) => {
+        console.log('doing something');
         var request = new XMLHttpRequest();
         request.open('POST', '/combine');
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -69,6 +70,7 @@ Tone.Buffer.on('load', () => {
 
         request.setRequestHeader('Content-Type', audioBlob.type);
         request.send(audioBlob);
+        console.log(audioBlob.getType());
         console.log('request sent');
       });
     }
