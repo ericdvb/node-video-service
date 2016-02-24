@@ -11,6 +11,7 @@ var sampler = new Tone.Sampler({
 var recorderInput = Tone.context.createGain();
 var recorder = new Recorder(recorderInput);
 var player = new Tone.Player().toMaster();
+var fileReader = new FileReader();
 sampler.connect(recorderInput);
 
 /**
@@ -64,14 +65,13 @@ Tone.Buffer.on('load', () => {
           console.log('request successful');
         }
 
-        //var formData = new FormData();
-        //formData.append('fname', 'userSound.wav');
-        //formData.append('data', audioBlob);
-
-        request.setRequestHeader('Content-Type', audioBlob.type);
-        request.send(audioBlob);
-        console.log(audioBlob.getType());
-        console.log('request sent');
+        fileReader.onload = (e) => {
+          request.setRequestHeader('Content-Type', audioBlob.type);
+          console.log(e.target.result);
+          request.send(e.target.result);
+          console.log('request sent');
+        };
+        fileReader.readAsDataURL(audioBlob);
       });
     }
   });
