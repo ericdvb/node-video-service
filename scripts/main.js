@@ -66,11 +66,18 @@ Tone.Buffer.on('load', () => {
         }
 
         fileReader.onload = (e) => {
-          request.setRequestHeader('Content-Type', audioBlob.type);
-          console.log(e.target.result);
+          //request.setRequestHeader('Content-Type', audioBlob.type);
+
+          // Send JSON in request body
+          //request.setRequestHeader('Content-Type', 'application/json');
+          //request.send(JSON.stringify({ "test": "test" }));
+
+          // Send URL Encoded Blob contents in request body
+          request.setRequestHeader('Content-Type', 'text/plain');
           request.send(e.target.result);
           console.log('request sent');
         };
+
         fileReader.readAsDataURL(audioBlob);
       });
     }
