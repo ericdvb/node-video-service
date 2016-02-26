@@ -3,6 +3,7 @@ var connectLR = require('connect-livereload');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var ffmpeg = require('fluent-ffmpeg');
+var streamBuffers = require('stream-buffers');
 
 var app = express();
 
@@ -20,12 +21,29 @@ app.use( express.static(__dirname + '/../'));
 var router = express.Router();
 router.post('/combine', function(req, res) {
   console.log('received a request to combine');
-  var regex = /^data:.+\/(.+);base64,(.*)$/;
-  var matches = req.body.match(regex);
-  var ext = matches[1];
-  var data = matches[2];
-  var buffer = new Buffer(data, 'base64');
-  console.log(data);
+  var ext = req.body.split(';')[0].split(':')[1].split('/')[1];
+  var data = req.body.split(';')[1].split(',')[1];
+  var readableStreamAudio = new streamBuffers.ReadableStreamBuffer({
+    frequency: 10,
+    chunkSize: 2048
+  });
+  var audioBuffer = new Buffer(data, 'base64');
+  readableStreamAudio.put(audioBuffer);
+  var ffmpegCommand = ffmpeg().input(readableStreamAudio)
+    .input('/Users/ewillenson/work/soundboard/ScareTactics.mp4')
+    .mergeToFile('/Users/ewillenson/work/soundboard/testFile.mp4')
+    .on('start', function(command) {
+      console.log('FFMpeg started by: ' + command);
+    })
+    .on('progress', function(p) {
+      console.log('progress: ' + percent);
+    })
+    .on('end', function() {
+      console.log('all done');
+    })
+    .on('error', function(error) {
+      console.log('Error ' + error.message);
+    });
 });
 
 router.get('/testroute', function(req, res) {
