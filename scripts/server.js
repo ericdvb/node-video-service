@@ -29,21 +29,23 @@ router.post('/combine', function(req, res) {
   });
   var audioBuffer = new Buffer(data, 'base64');
   readableStreamAudio.put(audioBuffer);
-  var ffmpegCommand = ffmpeg().input(readableStreamAudio)
+  var ffmpegCommand = ffmpeg()
+    .input(readableStreamAudio)
     .input('/Users/ewillenson/work/soundboard/ScareTactics.mp4')
-    .mergeToFile('/Users/ewillenson/work/soundboard/testFile.mp4')
+    .output('/Users/ewillenson/work/soundboard/test.mp4')
     .on('start', function(command) {
       console.log('FFMpeg started by: ' + command);
     })
     .on('progress', function(p) {
-      console.log('progress: ' + percent);
+      console.log('progress: ' + p.percent);
     })
     .on('end', function() {
       console.log('all done');
     })
     .on('error', function(error) {
       console.log('Error ' + error.message);
-    });
+    })
+    .run();
 });
 
 router.get('/testroute', function(req, res) {
