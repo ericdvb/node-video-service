@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var ffmpeg = require('fluent-ffmpeg');
 var streamBuffers = require('stream-buffers');
+var streamifier = require('streamifier');
 
 var app = express();
 
@@ -28,16 +29,25 @@ router.post('/combine', function(req, res) {
     chunkSize: 2048
   });
   var audioBuffer = new Buffer(data, 'base64');
-  readableStreamAudio.put(audioBuffer);
+  var readableAudioStream = streamifier.createReadStream(audioBuffer);
   var ffmpegCommand = ffmpeg()
-    .input(readableStreamAudio)
+    .input(readableAudioStream)
     .input('/Users/ewillenson/work/soundboard/ScareTactics.mp4')
-    .output('/Users/ewillenson/work/soundboard/test.mp4')
+    .output('/Users/ewillenson/work/soundboard/vignetteTest.mp4')
+    .videoFilter([
+      {
+        filter: 'vignette',
+        options: { angle: 'PI/2' }
+      }
+    ])
     .on('start', function(command) {
       console.log('FFMpeg started by: ' + command);
     })
+    .on('codecData', function(codecData) {
+      console.log('codec data: ' + JSON.stringify(codecData))
+    })
     .on('progress', function(p) {
-      console.log('progress: ' + p.percent);
+      console.log('progress: ' + JSON.stringify(p));
     })
     .on('end', function() {
       console.log('all done');

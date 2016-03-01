@@ -53,7 +53,7 @@ Tone.Buffer.on('load', () => {
         playerBuffer.getChannelData(0).set(buffers[0]);
         playerBuffer.getChannelData(1).set(buffers[1]);
         player.buffer = playerBuffer;
-        player.start();
+        //player.start();
       });
 
       recorder.exportWAV( (audioBlob) => {
