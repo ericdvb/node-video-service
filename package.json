@@ -35,8 +35,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.14.2",
+    "ddp-server": "^0.5.2",
     "fluent-ffmpeg": "^2.0.1",
+    "http-delayed-response": "0.0.4",
     "jquery": "^2.2.0",
+    "promise": "^7.1.1",
     "stream-buffers": "^3.0.0",
     "streamifier": "^0.1.1",
     "tone": "^0.6.1"
