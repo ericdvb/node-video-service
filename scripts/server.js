@@ -13,6 +13,9 @@ var AWS = require('aws-sdk');
 
 // AWS setup
 AWS.config.region = 'us-east-1';
+
+//you need to export your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+//as environment vars
 AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
 AWS.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 
@@ -101,18 +104,19 @@ router.post('/combine', function(req, res) {
   });
 
   videoPromise
-    .then( function(value) {
-      console.log('expected value is a file path: ' + value);
+    // once our video promise resolves... 
+    .then( function(filePath) {
+      // make a new promise with the 
       return new Promise( function(resolve, reject) {
         resolve({
-          readableVideoStream: fs.createReadStream(value),
-          fileName: value.slice(value.lastIndexOf('/') + 1, value.lastIndexOf('.'))
+          readableVideoStream: fs.createReadStream(filePath),
+          fileName: value.slice(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'))
         });
       });
     }) 
-    .then( function(value) {
+    .then( function(result) {
       return new Promise( function(resolve, reject) {
-        var s3obj = new AWS.S3({ params: { Bucket: 'pewdiefi-soundboard-test', Key: value.fileName } });
+        var s3obj = new AWS.S3({ params: { Bucket: 'pewdiefi-soundboard-test', Key: result.fileName } });
         s3obj.upload({ Body: value.readableVideoStream })
           .on('httpUploadProgress', function(evt) { console.log(evt); })
           .send(function(err, data) { 
