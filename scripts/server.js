@@ -8,6 +8,7 @@ var streamifier = require('streamifier');
 var DDPServer = require('ddp-server'); 
 var DelayedResponse = require('http-delayed-response'); 
 var Promise = require('promise');
+var AWS = require('aws-sdk');
 
 var app = express();
 

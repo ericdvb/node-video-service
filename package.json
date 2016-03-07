@@ -34,6 +34,7 @@
   "author": "Eric Willenson / ericdvb",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.2.41",
     "body-parser": "^1.14.2",
     "ddp-server": "^0.5.2",
     "fluent-ffmpeg": "^2.0.1",
