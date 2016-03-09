@@ -82,4 +82,24 @@ Tone.Buffer.on('load', () => {
       });
     }
   });
+
+  $('#file-upload').on('submit', (e) => {
+    console.log('submit event');
+    var form = e.target;
+    var data = new FormData(form);
+    var request = new XMLHttpRequest();
+
+    request.onreadystatechange = function() {
+      if( request.readystate === 4 ) {
+        request.status === 200 ?
+          console.log('request successful!') :
+          console.log('request failed :(');
+      }
+    }
+
+    request.open(form.method, form.action);
+    request.send(data);
+
+    return false;
+  });
 });

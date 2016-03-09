@@ -9,6 +9,11 @@
     <button id="three">3</button>
     <button id="four">4</button>
     <button id="record">rec</button>
+    <br>
+    <form id="file-upload" action="http://localhost:4000/submit-video" method="post" enctype="multipart/form-data">
+      <input type="file" name="video" id="file-input">
+      <input type="submit" id="submit-button" value="submit"></input>
+    </form>
     <script src="dist/main.js"></script>
   </body>
 </html>

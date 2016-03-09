@@ -1,4 +1,5 @@
 var express = require('express');
+var multer = require('multer');
 var connectLR = require('connect-livereload');
 var bodyParser = require('body-parser');
 var fs = require('fs');
@@ -10,6 +11,17 @@ var DelayedResponse = require('http-delayed-response');
 var Promise = require('promise');
 var AWS = require('aws-sdk');
 
+// Multer setup
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + '.mov');
+  }
+});
+var upload = multer({ storage: storage });
+//var upload = multer({ dest: 'uploads/' });
 
 // AWS setup
 AWS.config.region = 'us-east-1';
@@ -35,7 +47,7 @@ app.use( express.static(__dirname + '/../'));
 var router = express.Router();
 
 // Create the route to submit audio files for combining
-router.post('/combine', function(req, res) {
+router.post('/combine', bodyParser.text({ limit : '50mb' }), function(req, res) {
   console.log('received a request to combine');
   
   // create our response promise, since we have to wait for ffmpeg to finish
@@ -153,5 +165,10 @@ router.post('/combine', function(req, res) {
   delayedResponse.start(10000, 10000);
 });
 
-app.use(bodyParser.text({ limit : '50mb' }));
+router.post( '/submit-video', upload.single('video'), function(req, res, next) {
+  console.log(req.file);
+  req.file == undefined ? res.append('Status', 200) : res.set('Status-Code', 500);
+  res.end();
+});
+//app.use(bodyParser.text({ limit : '50mb' }));
 app.use('/', router);
