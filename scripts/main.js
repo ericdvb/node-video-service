@@ -122,4 +122,27 @@ Tone.Buffer.on('load', () => {
 
     return false;
   });
+
+  $('#email-video').on('mouseup', (e) => {
+    console.log('attempting to email video');
+    var videoID = $('#videoID').val();
+    var sendTo = $('#sendTo').val();
+    var request = new XMLHttpRequest();
+
+    request.onreadystatechange = function() {
+      if( request.readystate === 4 ) {
+        request.status === 200 ?
+          console.log('request successful!') :
+          console.log('request failed :(');
+      }
+    }
+
+    request.open('POST', '/emails');
+    request.setRequestHeader('X-Requested-With', 'XMLHttpReqest');
+    request.setRequestHeader('Content-Type', 'application/json');
+    request.send(JSON.stringify({
+      videoID: videoID,
+      sendTo: sendTo
+    }));
+  })
 });
