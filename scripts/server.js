@@ -16,6 +16,7 @@ app.use( express.static(__dirname + '/../'));
 // Create our router
 var router = express.Router();
 
+// Create our routes
 require('./audio.js')(router);
 require('./video.js')(router);
 require('./tweets.js')(router);
