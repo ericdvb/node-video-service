@@ -102,4 +102,24 @@ Tone.Buffer.on('load', () => {
 
     return false;
   });
+
+  $('#tweet-video').on('mouseup', (e) => {
+    console.log('attempting to tweet video');
+    var videoID = $('#videoID').val();
+    var request = new XMLHttpRequest();
+
+    request.onreadystatechange = function() {
+      if( request.readystate === 4 ) {
+        request.status === 200 ?
+          console.log('request successful!') :
+          console.log('request failed :(');
+      }
+    }
+
+    request.open('POST', '/tweets');
+    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    request.send(videoID);
+
+    return false;
+  });
 });

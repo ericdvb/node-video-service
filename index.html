@@ -10,10 +10,12 @@
     <button id="four">4</button>
     <button id="record">rec</button>
     <br>
-    <form id="file-upload" action="http://localhost:4000/submit-video" method="post" enctype="multipart/form-data">
+    <form id="file-upload" action="http://localhost:4000/video" method="post" enctype="multipart/form-data">
       <input type="file" name="video" id="file-input">
-      <input type="submit" id="submit-button" value="submit"></input>
+      <input type="submit" value="submit">
     </form>
+    <input type="text" id="videoID" value="enter video ID here">
+    <input type="button" id="tweet-video" value="tweet my video">
     <script src="dist/main.js"></script>
   </body>
 </html>
