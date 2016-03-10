@@ -44,6 +44,7 @@
     "promise": "^7.1.1",
     "stream-buffers": "^3.0.0",
     "streamifier": "^0.1.1",
-    "tone": "^0.6.1"
+    "tone": "^0.6.1",
+    "twit": "^2.2.3"
   }
 }
