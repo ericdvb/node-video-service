@@ -12,6 +12,7 @@ var Promise = require('promise');
 var AWS = require('aws-sdk');
 var Twit = require('twit');
 
+// Twit setup
 var twitterSettings = require('../settings.json').twitter;
 var twitterClient = new Twit(twitterSettings);
 
