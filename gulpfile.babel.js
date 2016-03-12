@@ -22,7 +22,8 @@ gulp.task('app', () => {
       'dist/audio.js',
       'dist/video.js',
       'dist/tweets.js',
-      'dist/emails.js'
+      'dist/emails.js',
+      'dist/delayedResponseHandlers.js'
     ]
   });
 });
