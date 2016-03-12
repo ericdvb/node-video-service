@@ -4,20 +4,12 @@
     <title>Soundboard test</title>
   </head>
   <body>
-    <button id="one">1</button>
-    <button id="two">2</button>
-    <button id="three">3</button>
-    <button id="four">4</button>
-    <button id="record">rec</button>
-    <br>
-    <form id="file-upload" action="http://localhost:4000/video" method="post" enctype="multipart/form-data">
-      <input type="file" name="video" id="file-input">
-      <input type="submit" value="submit">
+    <form id="share-video" action="http://localhost:4000/video" method="post" enctype="multipart/form-data">
+      <input type="file" name="video" id="file-input"><br>
+      <input type="text" name="shareTo" id="email" size="40" value="enter twitter handle or email">
+      <input type="button" id="tweet-video" value="tweet my video">
+      <input type="button" id="email-video" value="email my video">
     </form>
-    <input type="text" id="videoID" value="enter video ID here">
-    <input type="text" id="sendTo" value="enter twitter handle or email">
-    <input type="button" id="tweet-video" value="tweet my video">
-    <input type="button" id="email-video" value="email my video">
     <script src="dist/main.js"></script>
   </body>
 </html>
