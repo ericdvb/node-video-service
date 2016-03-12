@@ -13,41 +13,31 @@ module.exports = function(router) {
    * Uploads specified file to the twitter /media/upload endpoint
    *
    */
-  var uploadMedia = function(filepath) {
-
-    return new Promise(function(resolve, reject) {
-      // transform what we got in the request into the filepath
-      console.log(filepath);
-      var filePath = filepath;
-      resolve({
-        success: true,
-        error: null,
-        media_id_string: '708406346270576641'
-      });
-
-      //try {
-        //twitterClient.postMediaChunked({ file_path: filePath}, function (error, data, response) {
-          //var result = {
-            //success: !error ? true : false,
-            //error: error,
-            //media_id_string: data.media_id_string
-          //};
-          //!error ? resolve(result) : reject(result);
-        //});
-      //}
-      //catch(error) {
-        //console.log(error);
-        //resolve(error);
-      //}
-    });
+  var uploadMedia = function(filePath, req) {
+      if(req.body.twitterName != null) {
+        console.log('starting uploadMedia');
+        return new Promise(function(resolve, reject) {
+          console.log('inside the uploadMedia promise');
+          twitterClient.postMediaChunked({ file_path: filePath}, function (error, data, response) {
+            var result = {
+              success: !error ? true : false,
+              error: error,
+              media_id_string: data.media_id_string
+            };
+            !error ? resolve(result) : reject(result);
+            console.log('resolved uploadMedia promise');
+          });
+        });
+      } else { return new Promise(function(resolve, reject) {resolve(result);}); }
   };
 
-  var tweetStatusWithVideo = function(mediaIDString, requestBody) {
-
-    return new Promise(function(resolve, reject) {
-      try {
+  var tweetStatusWithVideo = function(mediaIDString, req) {
+    if(req.body.twitterName != null) {
+      console.log('starting tweetStatusWithVideo');
+      return new Promise(function(resolve, reject) {
+        console.log('inside the tweetStatusWithVideo promise');
         // set up resources we need for the status update
-        var handleString = requestBody.twitterName;
+        var handleString = req.body.twitterName;
         var statusString = 'Bite my shiny, metal ass, ' + handleString;
 
         twitterClient.post('statuses/update',
@@ -62,13 +52,10 @@ module.exports = function(router) {
               tweet_id: data.id
             };
             !error ? resolve(result) : reject(result);
+            !error ? console.log('no error') : console.log('error');
           });
-      }
-      catch (error) {
-        console.log(error);
-        reject(error);
-      }
-    });
+      });
+    } else { return new Promise(function(resolve, reject) {resolve(result);}); }
   };
 
 

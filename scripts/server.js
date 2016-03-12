@@ -72,48 +72,14 @@ router.post( '/video', upload.single('video'), (req, res, next) => {
 video.transcodeVideo(req)
   .then(function(result) {
       console.log(result);
-      if(req.body.twitterName != null) {
-        console.log('starting uploadMedia');
-        var filePath = result;
-        return new Promise(function(resolve, reject) {
-          twitterClient.postMediaChunked({ file_path: filePath}, function (error, data, response) {
-            var result = {
-              success: !error ? true : false,
-              error: error,
-              media_id_string: data.media_id_string
-            };
-            !error ? resolve(result) : reject(result);
-            console.log('resolved uploadMedia promise');
-          });
-        });
-      } else { return new Promise(function(resolve, reject) {resolve(result);}); }
+      return tweets.uploadMedia(result, req);
     })
     .then(function(result) {
       console.log(result);
-      if(req.body.twitterName != null) {
-        return new Promise(function(resolve, reject) {
-          // set up resources we need for the status update
-          var handleString = req.body.twitterName;
-          var statusString = 'Bite my shiny, metal ass, ' + handleString;
-
-          twitterClient.post('statuses/update',
-            { 
-              status: statusString,
-              media_ids: [result.media_id_string]
-            }, 
-            function(error, data, response) {
-              var result = {
-                success: !error ? true : false,
-                error: error,
-                tweet_id: data.id
-              };
-              !error ? resolve(result) : reject(result);
-              !error ? console.log('no error') : console.log('error');
-            });
-        });
-      } else { return new Promise(function(resolve, reject) {resolve(result);}); }
+      return tweets.tweetStatusWithVideo(result.media_id_string, req);
     })
     .then(function(result) {
+      console.log(result);
       if(req.body.email != null) {
         console.log('sending an email');
         return new Promise(function(resolve, reject) {
@@ -141,7 +107,7 @@ video.transcodeVideo(req)
             transport.close();
           });
         }); 
-      }
+      } else { return new Promise(function(resolve, reject) {resolve(result);})}
     })
     .then(function(result) {
       delayedResponse.end(null, {success: true, tweet_id: result.tweet_id});
