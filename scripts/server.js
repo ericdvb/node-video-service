@@ -64,8 +64,6 @@ router.post( '/video', upload.single('video'), (req, res, next) => {
   .on('cancel', delayedResponseHandlers.cancel);
 
   delayedResponse.wait();
-  
-
 
   video.transcodeVideo(req)
     .then(tweets.uploadMedia)
@@ -75,7 +73,6 @@ router.post( '/video', upload.single('video'), (req, res, next) => {
     .then(function(result) {
       console.log('delayed Response: ' + delayedResponse.end(result.tweet_id));
     });
-
 });
 
 
