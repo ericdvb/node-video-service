@@ -1,10 +1,11 @@
 module.exports = {
-    done: function(result) {
+    done: function(tweet_id) {
+      console.log('inside the done handler');
       var responseJSON = {
         success: true,
-        tweet_id: result.tweet_id
+        tweet_id: tweet_id
       }
-      res.write( JSON.stringify( responseJSON ) );
+      res.send( responseJSON );
       res.end();
     },
 

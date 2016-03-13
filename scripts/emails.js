@@ -6,40 +6,48 @@ module.exports = function(router) {
   var sendgridOptions = require('../settings.json').sendgrid;
 
   // Set up nodemailer mail transport
-  //var transport = nodemailer.createTransport(ses({
-    //accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    //secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-  //}));
   var transport = nodemailer.createTransport(sendgrid({
     auth: { api_key: sendgridOptions.api_key }
   }));
 
-  // create route that shares a link to a video via e-mail
-  router.post('/emails', bodyParser.json(), function(req, res) {
-    var sendTo = req.body.sendTo;
-    var subject = 'Here\'s your new video!';
-    var videoLink = req.body.videoID;
-    var text = 'Hi! Your new video is attached.'
+  var createMessage = function(videoPath, req){
+    var sendTo = req.body.email;
+    var subject = 'Hunter Vision @ SXSW';
+    var text = 'Hunters SyFy and Spotify have me seeing in Hunter Vision at the Spotify House @ SXSW!';
     var mailOptions = {
-      from: 'eric@bodegapapi.com',
+      from: 'huntersvisionspotify@reify.nyc',
       to: sendTo,
       subject: subject,
       text: text,
       attachments: [{
         filename: 'yourVideo.mp4',
-        path    : __dirname + '/../uploads/' + videoLink + '.mp4',
+        path    : videoPath,
       }]
     };
 
-    console.log(JSON.stringify(mailOptions));
+    return mailOptions;
+  };
 
-    transport.sendMail(mailOptions, function(error, info) {
-      if(error) {
-        return console.log(error);
-      } else {
-        console.log('Message sent: ' + info.response);
-      }
-      transport.close();
+  var sendMail = function(mailOptions) {
+    console.log('inside sendMail');
+    return new Promise(function(resolve, reject) {
+      transport.sendMail(mailOptions, function(error, info) {
+        var result = {
+          success: !error ? true : false,
+          error: error
+        };
+        !error ? resolve(result) : reject(result);
+        transport.close();
+      });
     });
+  };
+
+  // create route that shares a link to a video via e-mail
+  router.post('/emails', bodyParser.json(), function(req, res) {
   });
-}
+
+  return {
+    createMessage: createMessage,
+    sendMail: sendMail
+  };
+};
