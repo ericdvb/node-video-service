@@ -42,10 +42,6 @@ module.exports = function(router) {
     });
   };
 
-  // create route that shares a link to a video via e-mail
-  router.post('/emails', bodyParser.json(), function(req, res) {
-  });
-
   return {
     createMessage: createMessage,
     sendMail: sendMail
