@@ -18,8 +18,8 @@ module.exports = function(router) {
           .size('720x?')
           .audioBitrate('128k')
           .videoBitrate('2048k')
-          .audioCodec('libmp3lame')
-          //.outputOptions(['-strict -2'])
+          .audioCodec('aac')
+          .outputOptions(['-strict -2'])
           .on('start', function(command) {
             console.log('FFMpeg started by: ' + command);
           })

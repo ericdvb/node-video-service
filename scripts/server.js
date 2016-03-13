@@ -1,9 +1,14 @@
+// third party libraries
 var express = require('express');
 var connectLR = require('connect-livereload');
 var DelayedResponse = require('http-delayed-response');
 var delayedResponseHandlers = require('./delayedResponseHandlers.js');
 var multer = require('multer');
 
+// import our modules
+var tweets = require('./tweets.js')(router);
+var emails = require('./emails.js')(router);
+var video = require('./video.js')(router);
 
 var app = express();
 
@@ -32,16 +37,11 @@ app.use( express.static(__dirname + '/../'));
 // Create our router
 var router = express.Router();
 
-var tweets = require('./tweets.js')(router);
-var emails = require('./emails.js')(router);
-var video = require('./video.js')(router);
 
-// Create our routes
-
-// Create route for POSTing new media to media/update twitter endpoint
-// and then posting status update
-
-router.post( '/video', upload.single('video'), (req, res, next) => {
+// Create route for POSTing new videos
+// The route accepts an upload and a shareTo address, either a
+// twitter handle (twitterName) or email address (email)
+ router.post( '/video', upload.single('video'), (req, res, next) => {
 
   // create our response promise
   // set the content-type header to application/json using .json()
