@@ -35,7 +35,7 @@ module.exports = function(router) {
       console.log('inside the tweetStatusWithVideo promise');
       // set up resources we need for the status update
       var handleString = req.body.twitterName;
-      var statusString = 'Bite my shiny, metal ass, ' + handleString;
+      var statusString = '@HuntersSyfy & @Spotify have ' + handleString + ' in Hunter Vision at the #SpotifyHouse #SXSW!';
 
       twitterClient.post('statuses/update',
         { 

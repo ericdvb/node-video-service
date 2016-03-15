@@ -13,7 +13,7 @@ module.exports = function(router) {
   var createMessage = function(videoPath, req){
     var sendTo = req.body.email;
     var subject = 'Hunter Vision @ SXSW';
-    var text = 'Hunters SyFy and Spotify have me seeing in Hunter Vision at the Spotify House @ SXSW!';
+    var text = '@HuntersSyfy & @Spotify have you in Hunter Vision at the #SpotifyHouse #SXSW!';
     var mailOptions = {
       from: 'huntersvisionspotify@reify.nyc',
       to: sendTo,
