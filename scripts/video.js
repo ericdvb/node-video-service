@@ -12,6 +12,7 @@ module.exports = function(router) {
       try{
         var ffmpegCommand = ffmpeg()
           .input( __dirname + '/../uploads/' + req.file.filename )
+          //.input( __dirname + '/../syfyBug.png')
           .output( __dirname + '/../processed/' + outputFilename )
           .format('mp4')
           .videoCodec('libx264')
@@ -19,7 +20,8 @@ module.exports = function(router) {
           .audioBitrate('128k')
           .videoBitrate('2048k')
           .audioCodec('aac')
-          .outputOptions(['-strict -2'])
+          .addOption('-strict -2')
+          .addOption('-vf', 'movie=' + __dirname + '/../syfyBug.png [watermark]; [watermark] scale=720:720[watermark]; [in][watermark] overlay=0:main_h-overlay_h-10 [out]')
           .on('start', function(command) {
             console.log('FFMpeg started by: ' + command);
           })
