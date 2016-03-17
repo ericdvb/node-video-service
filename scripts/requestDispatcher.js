@@ -37,19 +37,30 @@ module.exports = function() {
       });
   };
 
+  var updateLastRequestAttempt = function(requestQueue, request) {
+    return new Promise(function(resolve, reject) {
+      requestQueue.update(request._id, {$set: {lastAttempt: Date.now()}}, function(e, result) {
+        console.log(e);
+        resolve(result);
+      });
+    });
+  };
+
   var attemptRequest = function (request) {
     var requestQueue = db.get('requests');
-    return tweets.uploadMedia(request.filePath)
+    if(request.mediaUploaded == "false") {
+      return tweets.uploadMedia(request.filePath)
       .then(function(result) {
         return new Promise(function(resolve, reject) {
-          requestQueue.update(request._id, {$set: {mediaUploaded: "true"}}, function(e) {
+          requestQueue.update(request._id, {$set: {mediaUploaded: "true", lastAttempt: Date.now(), mediaIDString: result.media_id_string}}, function(e) {
             console.log(e);
             resolve(result);
           });
         });
       })
+      .catch(updateLastRequestAttempt(requestQueue, request))
       .then(function(result) {
-        return tweets.tweetStatusWithVideo(result, request.twitterName);
+        return tweets.tweetStatusWithVideo(result.media_id_string, request.twitterName);
       })
       .then(function(result) {
         return new Promise(function(resolve, reject) {
@@ -58,7 +69,20 @@ module.exports = function() {
             resolve(result);
           });
         });
-      });
+      })
+      .catch(updateLastRequestAttempt(requestQueue, request));
+    } else if(request.statusUpdated == "false") {
+      return tweets.tweetStatusWithVideo(request.mediaIDString, request.twitterName)
+      .then(function(result) {
+        return new Promise(function(resolve, reject) {
+          requestQueue.update(request._id, {$set: {statusUpdated: "true"}}, function(e) {
+            console.log(e);
+            resolve(result);
+          });
+        });
+      })
+      .catch(updateLastRequestAttempt(requestQueue, request));
+    }
   };
 
   var startDispatcher = function() {

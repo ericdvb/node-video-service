@@ -24,7 +24,7 @@ module.exports = function() {
             media_id_string: data.media_id_string
           };
           !error ? resolve(result) : reject(result);
-          console.log('resolved uploadMedia promise');
+          !error ? console.log('uploadMedia successful') : console.log(result);
         });
       });
   };
@@ -49,7 +49,7 @@ module.exports = function() {
             tweet_id: data.id
           };
           !error ? resolve(result) : reject(result);
-          !error ? console.log('no error') : console.log('error');
+          !error ? console.log('tweetStatusWithVideo successful') : console.log(result);
         });
     });
   };
