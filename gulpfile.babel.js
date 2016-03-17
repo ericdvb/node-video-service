@@ -23,6 +23,7 @@ gulp.task('app', () => {
       'dist/video.js',
       'dist/tweets.js',
       'dist/emails.js',
+      'dist/requestDispatcher.js',
       'dist/delayedResponseHandlers.js'
     ]
   });

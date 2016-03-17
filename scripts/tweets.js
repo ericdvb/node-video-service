@@ -1,4 +1,4 @@
-module.exports = function(router) {
+module.exports = function() {
 
   var Twit = require('twit');
   var bodyParser = require('body-parser');
@@ -13,7 +13,7 @@ module.exports = function(router) {
    * Uploads specified file to the twitter /media/upload endpoint
    *
    */
-  var uploadMedia = function(filePath, req) {
+  var uploadMedia = function(filePath) {
       console.log('starting uploadMedia');
       return new Promise(function(resolve, reject) {
         console.log('inside the uploadMedia promise');
@@ -29,12 +29,12 @@ module.exports = function(router) {
       });
   };
 
-  var tweetStatusWithVideo = function(mediaIDString, req) {
+  var tweetStatusWithVideo = function(mediaIDString, twitterName) {
     console.log('starting tweetStatusWithVideo');
     return new Promise(function(resolve, reject) {
       console.log('inside the tweetStatusWithVideo promise');
       // set up resources we need for the status update
-      var handleString = req.body.twitterName;
+      var handleString = twitterName;
       var statusString = 'Bite my shiny, metal ass, ' + handleString;
 
       twitterClient.post('statuses/update',
