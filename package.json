@@ -40,6 +40,8 @@
     "fluent-ffmpeg": "^2.0.1",
     "http-delayed-response": "0.0.4",
     "jquery": "^2.2.0",
+    "mongodb": "^1.4.40",
+    "monk": "^1.0.1",
     "multer": "^1.1.0",
     "nodemailer": "^2.3.0",
     "nodemailer-sendgrid-transport": "^0.2.0",

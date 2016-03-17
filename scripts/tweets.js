@@ -1,4 +1,4 @@
-module.exports = function(router) {
+module.exports = function() {
 
   var Twit = require('twit');
   var bodyParser = require('body-parser');
@@ -13,7 +13,7 @@ module.exports = function(router) {
    * Uploads specified file to the twitter /media/upload endpoint
    *
    */
-  var uploadMedia = function(filePath, req) {
+  var uploadMedia = function(filePath) {
       console.log('starting uploadMedia');
       return new Promise(function(resolve, reject) {
         console.log('inside the uploadMedia promise');
@@ -24,17 +24,17 @@ module.exports = function(router) {
             media_id_string: data.media_id_string
           };
           !error ? resolve(result) : reject(result);
-          console.log('resolved uploadMedia promise');
+          !error ? console.log('uploadMedia successful') : console.log(result);
         });
       });
   };
 
-  var tweetStatusWithVideo = function(mediaIDString, req) {
+  var tweetStatusWithVideo = function(mediaIDString, twitterName) {
     console.log('starting tweetStatusWithVideo');
     return new Promise(function(resolve, reject) {
       console.log('inside the tweetStatusWithVideo promise');
       // set up resources we need for the status update
-      var handleString = req.body.twitterName;
+      var handleString = twitterName;
       var statusString = '@HuntersSyfy & @Spotify have ' + handleString + ' in Hunter Vision at the #SpotifyHouse #SXSW!';
 
       twitterClient.post('statuses/update',
@@ -49,7 +49,7 @@ module.exports = function(router) {
             tweet_id: data.id
           };
           !error ? resolve(result) : reject(result);
-          !error ? console.log('no error') : console.log('error');
+          !error ? console.log('tweetStatusWithVideo successful') : console.log(result);
         });
     });
   };

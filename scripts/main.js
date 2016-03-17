@@ -43,3 +43,21 @@ $('#email-video').on('mouseup', (e) => {
 
   return false;
 });
+
+$('#queue-request').on('mouseup', (e) => {
+  console.log('fake request button clicked');
+  var request = new XMLHttpRequest();
+  request.open('POST', '/fake');
+  request.setRequestHeader('X-Requested-With', 'XMLHttpReqest');
+  request.send();
+  return false;
+});
+
+$('#start-requests').on('mouseup', (e) => {
+  console.log('fake request button clicked');
+  var request = new XMLHttpRequest();
+  request.open('POST', '/start');
+  request.setRequestHeader('X-Requested-With', 'XMLHttpReqest');
+  request.send();
+  return false;
+});
